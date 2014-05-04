@@ -33,11 +33,15 @@ SC_HOME=$SCALA_HOME
 if [ -z "$SC_HOME" ]; then
     SC_HOME=${HOME}/scala-$SCALA_VERSION
 fi
+H_HOME=$HIVE_HOME
+if [ -z "$H_HOME" ]; then
+    H_HOME=$SH_HOME/hive-${HIVE_VERSION}-shark-${SHARK_VERSION}-bin
+fi
 
 export SCALA_HOME=$SC_HOME
 export SPARK_HOME=$SP_HOME
 export SHARK_HOME=$SH_HOME
-export HIVE_HOME=$SHARK_HOME/hive-${HIVE_VERSION}-shark-${SHARK_VERSION}-bin
+export HIVE_HOME=$H_HOME
 
 SPARK_CLASSPATH=$SHARK_HOME/shark-${SHARK_VERSION}/target/scala-${SCALA_VERSION}/shark_${SCALA_VERSION}-${SHARK_VERSION}.jar:$SPARK_HOME/core/target/spark-core_${SCALA_VERSION}-${SPARK_VERSION}-incubating.jar:$SCALA_HOME/lib/scala-library.jar:$SHARK_HOME/shark-${SHARK_VERSION}/lib/JavaEWAH-0.4.2.jar
 
@@ -61,8 +65,8 @@ done
 
 # Compile and build jar
 rm -f shark/example/java/Example1*.class
-javac -d . -cp "$SPARK_CLASSPATH:$SHARK_HOME/hive-${HIVE_VERSION}-shark-${SHARK_VERSION}-bin/lib/hive-metastore-${HIVE_VERSION}-shark-${SHARK_VERSION}.jar" ../java/Example1.java
-#export CLASSPATH=$SPARK_CLASSPATH:$SHARK_HOME/hive-${HIVE_VERSION}-shark-${SHARK_VERSION}-bin/lib/hive-metastore-${HIVE_VERSION}-shark-${SHARK_VERSION}.jar
+javac -d . -cp "$SPARK_CLASSPATH:$HIVE_HOME/lib/hive-metastore-${HIVE_VERSION}-shark-${SHARK_VERSION}.jar" ../java/Example1.java
+#export CLASSPATH=$SPARK_CLASSPATH:$HIVE_HOME/lib/hive-metastore-${HIVE_VERSION}-shark-${SHARK_VERSION}.jar
 #javac -d . ../java/Example1.java
 rm -f shark_example.jar
 jar cvf shark_example.jar shark/example/java/Example1*.class
